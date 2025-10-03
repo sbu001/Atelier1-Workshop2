@@ -7,7 +7,7 @@ function preload()
 
 function setup() 
 {
-	createCanvas(windowWidth, windowHeight);
+	createCanvas(1000, 1500);
 }
 
 function draw()
@@ -15,6 +15,6 @@ function draw()
 background(20, 200, 20);
 image(cat, width/2, height/2, 100, 120);
 
-fill(255)
+fill(255);
 ellipse(100, 100, 100, 100);
 }
