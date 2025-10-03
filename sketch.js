@@ -1,47 +1,75 @@
-//let cat;
-let touch1X = 0;
-let touch1Y = 0; 
-let touch2X = 0;  
-let touch2Y = 0; 
-let touchAngle = 0;
-let colours = [100, 150, 200, 250, 300, 359];
-let randomIndex = Math.floor(Math.random() * colours.length);
+let touch1X = 0;      // X position of first touch
+let touch1Y = 0;      // Y position of first touch
+let touch2X = 0;      // X position of second touch
+let touch2Y = 0;      // Y position of second touch
+let touchAngle = 0;   // Angle between the two touches (in degrees)
 
-showDebug();
-
-// function preload()
-// {
-// 	  cat = loadImage("cat.gif");
-// }
-
+// ==============================================
+// SETUP FUNCTION - Runs once when page loads
+// ==============================================
 function setup() 
 {
-	createCanvas(windowWidth, windowHeight);
-	lockGestures();
-	textAlign(CENTER, CENTER);
-	textSize(24);
+    // Create a canvas that fills the entire screen
+    createCanvas(windowWidth, windowHeight);
+    
+    // Lock mobile gestures to prevent scrolling, zooming, etc.
+    lockGestures();
+    
+    // Set text properties
+    textAlign(CENTER, CENTER);
+    textSize(24);
+}
 
-	if (touches.length >= 2){
-		touch1X = touches[0].x;
+// ==============================================
+// DRAW FUNCTION - Runs continuously
+// ==============================================
+function draw() 
+{
+    // Clear the screen
+    background(240, 240, 240);
+    
+    // Check if we have at least 2 touches
+    if (touches.length >= 2) 
+    {
+        // Get the positions of the first 2 touches
+        touch1X = touches[0].x;
         touch1Y = touches[0].y;
         touch2X = touches[1].x;
         touch2Y = touches[1].y;
-
-		let angleInRadians = atan2(touch2Y - touch1Y, touch2X - touch1X);
-        touchAngle = degrees(angleInRadians);
-
-		//line
-		stroke(100, 100, 100);
+        
+        // Calculate angle between the two touches
+        // atan2 gives us the angle in radians, so we convert to degrees
+        let angleInRadians = atan2(touch2Y - touch1Y, touch2X - touch1X);
+        touchAngle = degrees(angleInRadians);  // Convert to degrees
+        
+        // Draw a line between the two touches
+        stroke(100, 100, 100);
         strokeWeight(3);
-		strokeStyle = colours[randomIndex];
         line(touch1X, touch1Y, touch2X, touch2Y);
-
-		//circles
-		fillStyle = colours[randomIndex];  // Red circles
+        
+        // Draw circles at each touch point
+        fill(255, 0, 0);  // Red circles
         noStroke();
         circle(touch1X, touch1Y, 30);
         circle(touch2X, touch2Y, 30);
-	}     else 
+        
+        // Draw angle text in the middle of the line
+        let midX = (touch1X + touch2X) / 2;
+        let midY = (touch1Y + touch2Y) / 2;
+        
+        fill(0, 0, 0);  // Black text
+        textSize(20);
+        text(Math.round(touchAngle) + "°", midX, midY - 30);
+        
+        // Display coordinates and angle at the top of screen
+        textAlign(LEFT, TOP);
+        textSize(18);
+        text("Touch 1: (" + Math.round(touch1X) + ", " + Math.round(touch1Y) + ")", 20, 20);
+        text("Touch 2: (" + Math.round(touch2X) + ", " + Math.round(touch2Y) + ")", 20, 50);
+        text("Angle: " + Math.round(touchAngle) + "° (degrees)", 20, 80);
+        
+    } 
+    else 
     {
         // Instructions when not enough touches
         textAlign(CENTER, CENTER);
@@ -51,6 +79,11 @@ function setup()
     }
 }
 
+// ==============================================
+// TOUCH EVENT FUNCTIONS
+// ==============================================
+
+// This function runs when a new touch begins
 function touchStarted() 
 {
     // Touch positions will be updated in draw() function
@@ -62,13 +95,4 @@ function touchEnded()
 {
     // Touch positions will be updated in draw() function
     return false;
-}
-
-function draw()
-{
-background(20, 200, 20);
-//image(cat, width/2, height/2, 100, 120);
-
-// fill(255);
-// ellipse(100, 100, 100, 100);
 }
