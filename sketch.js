@@ -55,7 +55,7 @@ function draw() {
   if (window.sensorsEnabled){
     fill(255);
     textSize(13);
-    text("Move your device to move the cat", width/2, height - 30);
+    text("Move your device to move the cat and generate ellipses", width/2, height - 30);
   
     // Add acceleration to speed (inverted X so it feels natural)
     speedX += accelerationX * -0.3;
@@ -74,9 +74,10 @@ function draw() {
       speedX = -speedX * restitution;
       push();
       strokeWeight(1.2);
-      stroke(random(colours));
       noFill();
-      ellipse( x + 50, y + 50, random(10, 50), random(10, 50));
+      for( var i=0; i<5; i++){
+      stroke(random(colours));
+      ellipse(random(width), random(height), random(10, 50), random(10, 50));}
       pop();
 
     } else if (x >= width - 100) {
@@ -84,17 +85,32 @@ function draw() {
       speedX = -speedX * restitution;
       push();
       strokeWeight(1.2);
-      stroke(random(colours));
       noFill();
-      ellipse(x + 50, y + 50, random(10, 50), random(10, 50));
+      for( var i=0; i<5; i++){
+      stroke(random(colours));
+      ellipse(random(width), random(height), random(10, 50), random(10, 50));}
       pop();
     }
     if (y <= height/2 - 150) {
       y = height/2 - 150;
       speedY = -speedY * restitution;
+      push();
+      strokeWeight(1.2);
+      noFill();
+      for( var i=0; i<5; i++){
+      stroke(random(colours));
+      ellipse(random(width), random(height), random(10, 50), random(10, 50));}
+      pop();
     } else if (y >= height - 120) {
       y = height - 120;
       speedY = -speedY * restitution;
+      push();
+      strokeWeight(1.2);
+      noFill();
+      for( var i=0; i<5; i++){
+      stroke(random(colours));
+      ellipse(random(width), random(height), random(10, 50), random(10, 50));}
+      pop();
     }
 
     // Prevent tiny jitter by zeroing very small speeds
