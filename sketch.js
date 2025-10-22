@@ -134,13 +134,6 @@ if (typeof DeviceMotionEvent !== 'undefined') {
   });
 }
 
-// push();
-// strokeWeight(1.2);
-// stroke(random(colours));
-// noFill();
-// ellipse(width/2, height/2, random(10, 50), random(10, 50));
-// pop();
-
 }
 function touchStarted(){
     return false;
