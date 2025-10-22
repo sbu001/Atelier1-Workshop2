@@ -4,10 +4,12 @@ let y;
 let speedX = 0;    
 let speedY = 0;
 let damping = 0.98; // Slow down movement over time
+let restitution = 1; // Bounce energy retained on collision (0..1)
 let accelerationX = 0;
 let accelerationY = 0;
 let accelerationZ = 0;
 let deviceMoved;
+//let colours = ['#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff', '#a0c4ff', '#bdb2ff', '#ffc6ff'];
 
 function preload() {
   cat = loadImage("cat.gif");
@@ -24,21 +26,18 @@ function setup() {
 }
 
 function draw() {
-  background(10);
-  image(cat, x, y, 100, 120);
+  background(10, 40);
+  image(cat, x, y, 80, 95);
 
   if (window.sensorsEnabled) {
     fill(255);
-    text("Cat moving wtih device acceleration", width/2, 40);
-    text("X: " + nf(accelerationX, 1, 2) + " m/s²", width/2, height/6 + 40);
-    text("Y: " + nf(accelerationY, 1, 2) + " m/s²", width/2, height/6 + 70);
-    text("Z: " + nf(accelerationZ, 1, 2) + " m/s²", width/2, height/6 + 100);
-    text("Move your device to move the cat", width/2, height - 60);
-    text("Shake, tilt, or move the device in different directions", width/2, height - 30);
+    text("Move your device to move the cat", width/2, height - 30);
+    //current time set
+    text(millis(), width/2, 30);
         
     // Add acceleration to speed (inverted X so it feels natural)
-    speedX += accelerationX * -0.01;
-    speedY += accelerationY * 0.01;
+    speedX += accelerationX * -0.3;
+    speedY += accelerationY * 0.3;
 
     // Update position
     x += speedX;
@@ -49,8 +48,27 @@ function draw() {
     speedY *= damping;
 
     // Keep the GIF inside the canvas boundaries
-    x = constrain(x, 0, width - 100);
-    y = constrain(y, 0, height - 120);
+    // Bounce on horizontal edges
+    if (x <= 0) {
+      x = 0;
+      speedX = -speedX * restitution;
+    } else if (x >= width - 100) {
+      x = width - 100;
+      speedX = -speedX * restitution;
+    }
+
+    // Bounce on vertical edges
+    if (y <= 0) {
+      y = 0;
+      speedY = -speedY * restitution;
+    } else if (y >= height - 120) {
+      y = height - 120;
+      speedY = -speedY * restitution;
+    }
+
+    // Prevent tiny jitter by zeroing very small speeds
+    if (Math.abs(speedX) < 0.01) speedX = 0;
+    if (Math.abs(speedY) < 0.01) speedY = 0;
   } else {
     fill(255, 100, 100);
     text("Tap the screen to enable motion sensors", width/2, height - 30);
@@ -68,6 +86,8 @@ if (typeof DeviceMotionEvent !== 'undefined') {
     }
   });
 }
+//fill(colours[random(colours.length)]);
+rect(width/2, height/3, 50, 50);
 }
 function touchStarted(){
     return false;
