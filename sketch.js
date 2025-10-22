@@ -28,13 +28,34 @@ function setup() {
 function draw() {
   background(10, 40);
   image(cat, x, y, 80, 95);
+  let m = minute();
+  let h = hour();
+  let timeString = nf(h, 2) + ':' + nf(m, 2);
+  let d = day();
+  let dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  let monthName = monthNames[month() - 1];
+  let now = new Date();
+  let dayOfWeek = dayNames[now.getDay()];
+  let dateString = dayOfWeek + ', ' + monthName + ' ' + d;
+  //clock
+  push();
+  fill(255);
+  textSize(70);
+  textStyle(BOLD);
+  text(timeString, width/2, height/2 - 200);
+  pop();
+  //date
+  push();
+  fill(255);
+  textSize(20);
+  text(dateString, width/2, height/2 - 150);
+  pop();
 
   if (window.sensorsEnabled) {
     fill(255);
     text("Move your device to move the cat", width/2, height - 30);
-    //current time set
-    text(millis(), width/2, 30);
-        
+  
     // Add acceleration to speed (inverted X so it feels natural)
     speedX += accelerationX * -0.3;
     speedY += accelerationY * 0.3;
@@ -58,8 +79,8 @@ function draw() {
     }
 
     // Bounce on vertical edges
-    if (y <= 0) {
-      y = 0;
+    if (y <= height/2 - 150) {
+      y = height/2 - 150;
       speedY = -speedY * restitution;
     } else if (y >= height - 120) {
       y = height - 120;
@@ -87,7 +108,10 @@ if (typeof DeviceMotionEvent !== 'undefined') {
   });
 }
 //fill(colours[random(colours.length)]);
-rect(width/2, height/3, 50, 50);
+// push();
+// fill(20, 20, 20);
+// rect(width/2, height/2, 50, 50);
+// pop();
 }
 function touchStarted(){
     return false;
