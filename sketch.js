@@ -9,7 +9,7 @@ let accelerationX = 0;
 let accelerationY = 0;
 let accelerationZ = 0;
 let deviceMoved;
-//let colours = ['#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff', '#a0c4ff', '#bdb2ff', '#ffc6ff'];
+let colours = ['#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff', '#a0c4ff', '#bdb2ff', '#ffc6ff'];
 
 function preload() {
   cat = loadImage("cat.gif");
@@ -20,7 +20,7 @@ function setup() {
     x = width / 2;
     y = height / 2;
     enableGyroTap();
-    //deviceMoved();
+    // deviceMoved();
     textAlign(CENTER, CENTER);
     textSize(16);
 }
@@ -52,8 +52,9 @@ function draw() {
   text(dateString, width/2, height/2 - 150);
   pop();
 
-  if (window.sensorsEnabled) {
+  if (window.sensorsEnabled){
     fill(255);
+    textSize(13);
     text("Move your device to move the cat", width/2, height - 30);
   
     // Add acceleration to speed (inverted X so it feels natural)
@@ -64,21 +65,30 @@ function draw() {
     x += speedX;
     y += speedY;
 
-    // Damping to make movement smoother
     speedX *= damping;
     speedY *= damping;
 
-    // Keep the GIF inside the canvas boundaries
-    // Bounce on horizontal edges
+    //bouncing off edges
     if (x <= 0) {
       x = 0;
       speedX = -speedX * restitution;
+      push();
+      strokeWeight(1.2);
+      stroke(random(colours));
+      noFill();
+      ellipse( x + 50, y + 50, random(10, 50), random(10, 50));
+      pop();
+
     } else if (x >= width - 100) {
       x = width - 100;
       speedX = -speedX * restitution;
+      push();
+      strokeWeight(1.2);
+      stroke(random(colours));
+      noFill();
+      ellipse(x + 50, y + 50, random(10, 50), random(10, 50));
+      pop();
     }
-
-    // Bounce on vertical edges
     if (y <= height/2 - 150) {
       y = height/2 - 150;
       speedY = -speedY * restitution;
@@ -107,11 +117,14 @@ if (typeof DeviceMotionEvent !== 'undefined') {
     }
   });
 }
-//fill(colours[random(colours.length)]);
+
 // push();
-// fill(20, 20, 20);
-// rect(width/2, height/2, 50, 50);
+// strokeWeight(1.2);
+// stroke(random(colours));
+// noFill();
+// ellipse(width/2, height/2, random(10, 50), random(10, 50));
 // pop();
+
 }
 function touchStarted(){
     return false;
